@@ -11,6 +11,11 @@ public class CelestialBody {
 
     private String color;
 
+    /**
+     * Constructor for basic Body centred on the origin
+     * @param r Distance from the origin
+     * @param th Angle from the origin
+     */
     public CelestialBody(float r, float th) {
         this.name = "";
         this.diameter = 0;
@@ -21,14 +26,26 @@ public class CelestialBody {
         this.color = "BLACK";
     }
 
+    /**
+     * Constructor for a Body with no speed, at the origin
+     * @param name Name of the Body
+     * @param diameter Diameter of the Body
+     * @param color Color of the Body
+     */
     public CelestialBody(String name, float diameter, String color) {
         this(name, diameter, 0, color, ORIGIN, 0, 0);
     }
 
-    public CelestialBody(String name, float diameter, float speed, String color, CelestialBody parent) {
-        this(name, diameter, speed, color, parent, 0, 0);
-    }
-
+    /**
+     * Main constructor for a CelestialBody with position, size, centre of orbit and speed
+     * @param name Name of the Body
+     * @param diameter Diameter of the Body
+     * @param speed Angular speed of the Body
+     * @param color Color of the Body
+     * @param parent Body at the center of orbit
+     * @param r Distance from center of orbit
+     * @param th Angle from center of orbit
+     */
     public CelestialBody(String name, float diameter, float speed, String color, CelestialBody parent, float r, float th) {
         this.name = name;
         this.diameter = diameter;
@@ -39,6 +56,10 @@ public class CelestialBody {
         this.color = color;
     }
 
+    /**
+     * Draws the body to the screen using SolarSystem.drawSolarObjectAbout
+     * @param system The SolarSystem to draw to
+     */
     public void draw(SolarSystem system) {
         system.drawSolarObjectAbout(
             distanceToCentre, angleToOrigin, diameter, color,
@@ -47,6 +68,9 @@ public class CelestialBody {
         );
     }
 
+    /**
+     * Updates the position of the body
+     */
     public void update() {
         this.angleToOrigin += this.speed;
     }
@@ -108,6 +132,8 @@ public class CelestialBody {
     }
 
 
-
+    /**
+     * Constant for the Origin - (0, 0)
+     */
     public static CelestialBody ORIGIN = new CelestialBody(0, 0);
 }
