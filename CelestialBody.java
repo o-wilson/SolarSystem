@@ -1,13 +1,13 @@
 public class CelestialBody {
     private String name;
     
-    private float diameter;
+    private double diameter;
 
     private CelestialBody centerOfOrbit;
 
-    private float distanceToCentre;
-    private float angleToOrigin;
-    private float speed;
+    private double distanceToCentre;
+    private double angleToOrigin;
+    private double speed;
 
     private String color;
 
@@ -16,7 +16,7 @@ public class CelestialBody {
      * @param r Distance from the origin
      * @param th Angle from the origin
      */
-    public CelestialBody(float r, float th) {
+    public CelestialBody(double r, double th) {
         this.name = "";
         this.diameter = 0;
         this.centerOfOrbit = null;
@@ -32,7 +32,7 @@ public class CelestialBody {
      * @param diameter Diameter of the Body
      * @param color Color of the Body
      */
-    public CelestialBody(String name, float diameter, String color) {
+    public CelestialBody(String name, double diameter, String color) {
         this(name, diameter, 0, color, ORIGIN, 0, 0);
     }
 
@@ -46,7 +46,7 @@ public class CelestialBody {
      * @param r Distance from center of orbit
      * @param th Angle from center of orbit
      */
-    public CelestialBody(String name, float diameter, float speed, String color, CelestialBody parent, float r, float th) {
+    public CelestialBody(String name, double diameter, double speed, String color, CelestialBody parent, double r, double th) {
         this.name = name;
         this.diameter = diameter;
         this.centerOfOrbit = parent;
@@ -79,11 +79,11 @@ public class CelestialBody {
         this.name = name;
     }
 
-    public float getDiameter() {
+    public double getDiameter() {
         return diameter;
     }
 
-    public void setDiameter(float diameter) {
+    public void setDiameter(double diameter) {
         this.diameter = diameter;
     }
 
@@ -95,27 +95,27 @@ public class CelestialBody {
         this.centerOfOrbit = centerOfOrbit;
     }
 
-    public float getDistanceToCentre() {
+    public double getDistanceToCentre() {
         return distanceToCentre;
     }
 
-    public void setDistanceToCentre(float distanceToCentre) {
+    public void setDistanceToCentre(double distanceToCentre) {
         this.distanceToCentre = distanceToCentre;
     }
 
-    public float getAngleToOrigin() {
+    public double getAngleToOrigin() {
         return angleToOrigin;
     }
 
-    public void setAngleToOrigin(float angleToOrigin) {
+    public void setAngleToOrigin(double angleToOrigin) {
         this.angleToOrigin = angleToOrigin;
     }
 
-    public float getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(float speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 

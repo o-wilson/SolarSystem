@@ -28,12 +28,17 @@ public class Simulator {
      * Update all objects
      */
     public void update() {
+        boolean windowVisible = false;
+        system.setVisible(windowVisible);
+
         while (true) {
             for (CelestialBody b : bodies) {
                 b.update();
                 b.draw(system);
             }
             system.finishedDrawing();
+
+            if (!windowVisible) system.setVisible(windowVisible = true);
         }
     }
 
