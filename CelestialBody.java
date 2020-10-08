@@ -61,11 +61,7 @@ public class CelestialBody {
      * @param system The SolarSystem to draw to
      */
     public void draw(SolarSystem system) {
-        system.drawSolarObjectAbout(
-            distanceToCentre, angleToOrigin, diameter, color,
-            centerOfOrbit.getDistanceToCentre(),
-            centerOfOrbit.getAngleToOrigin()
-        );
+        system.drawSolarObjectAbout(this);
     }
 
     /**

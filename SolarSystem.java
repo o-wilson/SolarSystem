@@ -157,6 +157,30 @@ public class SolarSystem extends JFrame
 	}
 
 	/**
+	 * Draws a Body relative to its default centre of orbit
+	 * @param child The Body to be drawn
+	 */
+	public void drawSolarObjectAbout(CelestialBody child) {
+		drawSolarObjectAbout(child, child.getCenterOfOrbit());
+	}
+
+	/**
+	 * Draws the child object relative to its parent (centre of orbit)
+	 * @param child The Body to be drawn
+	 * @param parent The Body it's orbiting
+	 */
+	public void drawSolarObjectAbout(CelestialBody child, CelestialBody parent) {
+		double distance = child.getDistanceToCentre();
+		double angle = child.getAngleToOrigin();
+		double diameter = child.getDiameter();
+		String col = child.getColor();
+		double cORD = parent.getDistanceToCentre();
+		double cORA = parent.getAngleToOrigin();
+
+		drawSolarObjectAbout(distance, angle, diameter, col, cORD, cORA);
+	}
+
+	/**
 	 * Draws a round shape in the window at the given co-ordinates. 
 	 * The SolarSystem class uses <i>Polar Co-ordinates</i> to represent the location
 	 * of objects in the solar system. This method operates in the same fashion as drawSolarObject, but

@@ -33,7 +33,6 @@ public class Simulator {
                 b.update();
                 b.draw(system);
             }
-
             system.finishedDrawing();
         }
     }
