@@ -12,10 +12,9 @@ public class Simulator {
      * Main class for running the simulation
      */
     public Simulator() {
-        system = new SolarSystem(800, 600);
+        system = new SolarSystem(1600, 900);
         bodies = new ArrayList<CelestialBody>();
-        scale = .5;
-        timeScale = 365;
+        timeScale = 1;
         start();
         update();
     }
@@ -24,11 +23,17 @@ public class Simulator {
      * Initialise all objects
      */
     public void start() {
-        CelestialBody sun = new CelestialBody("Sun", 50, "YELLOW");
+        CelestialBody sun = new CelestialBody("Sun", 1392.7, "YELLOW");
         bodies.add(sun);
-        // bodies.add(new CelestialBody("Mercury", ))
-        bodies.add(new CelestialBody("Earth", 20, 0.12f, "BLUE", CelestialBody.ORIGIN, 200, 0));
-        bodies.add(new CelestialBody("Moon", 10, 10, "WHITE", getBodyByName("Earth"), 40, 0));
+        bodies.add(new CelestialBody("Mercury", 4.8794, 88, "GRAY", sun, 57.91, 90));
+        bodies.add(new CelestialBody("Venus", 12.104, 225, "ORANGE", sun, 108.2, 90));
+        bodies.add(new CelestialBody("Earth", 12.742, 365, "BLUE", sun, 149.6, 90));
+        bodies.add(new CelestialBody("Moon", 3.4742, 1, "WHITE", getBodyByName("Earth"), .384, 90));
+        bodies.add(new CelestialBody("Mars", 6.779, 687, "RED", sun, 227.9, 90));
+        bodies.add(new CelestialBody("Jupiter", 139.82, 4333, "ORANGE", sun, 778.5, 90));
+        bodies.add(new CelestialBody("Saturn", 116.46, 10759, "YELLOW", sun, 1434, 90));
+        bodies.add(new CelestialBody("Uranus", 50.724, 30688, "CYAN", sun, 2871, 90));
+        bodies.add(new CelestialBody("Neptune", 49.244, 60182, "BLUE", sun, 4495, 90));
     }
 
     /**

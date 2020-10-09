@@ -55,7 +55,7 @@ public class SolarSystem extends JFrame implements MouseWheelListener
 		renderingHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
 		//added by Oliver
-		scale = 1;
+		scale = .4;
 		addMouseWheelListener(this);
 	}
 
@@ -263,7 +263,7 @@ public class SolarSystem extends JFrame implements MouseWheelListener
 	//added by Oliver
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		double zoomSpeed = .05;
+		double zoomSpeed = .01;
 		scale -= e.getWheelRotation() * zoomSpeed;
 	}
 

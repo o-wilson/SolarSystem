@@ -1,7 +1,7 @@
 public class CelestialBody {
     private String name;
     
-    private double diameter; //in km
+    private double diameter; //in thousand km
 
     private CelestialBody centerOfOrbit;
 
@@ -24,6 +24,7 @@ public class CelestialBody {
         this.distanceToCentre = r;
         this.angleToOrigin = th;
         this.speed = 0;
+        this.lengthOfYear = 0;
         this.color = "BLACK";
     }
 
@@ -44,14 +45,14 @@ public class CelestialBody {
      * @param speed Angular speed of the Body
      * @param color Color of the Body
      * @param parent Body at the center of orbit
-     * @param r Distance from center of orbit
+     * @param r Distance from edge of center of orbit
      * @param th Angle from center of orbit
      */
     public CelestialBody(String name, double diameter, double lengthOfYear, String color, CelestialBody parent, double r, double th) {
         this.name = name;
         this.diameter = diameter;
         this.centerOfOrbit = parent;
-        this.distanceToCentre = r;
+        this.distanceToCentre = r + parent.getDiameter() / 2;
         this.angleToOrigin = th;
         this.speed = 365/lengthOfYear;
         this.lengthOfYear = lengthOfYear;
@@ -91,7 +92,8 @@ public class CelestialBody {
      * Updates the position of the body
      */
     public void update(double timeScale) {
-        this.angleToOrigin += timeScale / this.speed;
+        if (this.lengthOfYear != 0)
+            this.angleToOrigin += timeScale / this.lengthOfYear;
     }
 
     public String getName() {
