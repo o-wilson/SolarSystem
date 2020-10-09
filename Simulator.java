@@ -45,6 +45,7 @@ public class Simulator {
         while (true) {
             scale = system.getScale();
             timeScale = system.getTimeScale();
+            system.update();
 
             for (CelestialBody b : bodies) {
                 b.update(timeScale);

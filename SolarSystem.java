@@ -10,7 +10,7 @@ import java.util.*;
  * 
  * @author Joe Finney
  */
-public class SolarSystem extends JFrame implements MouseWheelListener, MouseListener {
+public class SolarSystem extends JFrame implements MouseWheelListener, MouseListener, KeyListener {
 	private int width = 300;
 	private int height = 300;
 	private boolean exiting = false;
@@ -22,6 +22,8 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	private double scale;
 	private double timeScale;
 	private boolean rmbPressed, lmbPressed;
+	private double xOff, yOff;
+	private boolean[] arrowKeys; //Clockwise from left - L,U,R,D
 
 	/**
 	 * Create a view of the Solar System. Once an instance of the SolarSystem class
@@ -60,8 +62,12 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 		timeScale = 365;
 		addMouseWheelListener(this);
 		addMouseListener(this);
+		addKeyListener(this);
 		rmbPressed = false;
 		lmbPressed = false;
+		xOff = 0;
+		yOff = 0;
+		arrowKeys = new boolean[] {false, false, false, false};
 	}
 
 	/**
@@ -134,8 +140,9 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	 */
 	public void drawSolarObject(double distance, double angle, double diameter, String col) {
 		Color colour = this.getColourFromString(col);
-		double centreOfRotationX = ((double) width) / 2.0;
-		double centreOfRotationY = ((double) height) / 2.0;
+		//xOff, yOff added by Oliver
+		double centreOfRotationX = (((double) width) / 2.0) + xOff;
+		double centreOfRotationY = (((double) height) / 2.0) + yOff;
 
 		double rads = Math.toRadians(angle);
 		double x = (int) (centreOfRotationX + distance * Math.sin(rads)) - diameter / 2;
@@ -218,8 +225,9 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 			double centreOfRotationDistance, double centreOfRotationAngle) {
 		Color colour = this.getColourFromString(col);
 		double centrerads = Math.toRadians(centreOfRotationAngle);
-		double centreOfRotationX = (((double) width) / 2.0) + centreOfRotationDistance * Math.sin(centrerads);
-		double centreOfRotationY = (((double) height) / 2.0) + centreOfRotationDistance * Math.cos(centrerads);
+		//xOff, yOff added by Oliver
+		double centreOfRotationX = (((double) width) / 2.0) + centreOfRotationDistance * Math.sin(centrerads) + xOff;
+		double centreOfRotationY = (((double) height) / 2.0) + centreOfRotationDistance * Math.cos(centrerads) + yOff;
 
 		double rads = Math.toRadians(angle);
 		double x = (int) (centreOfRotationX + distance * Math.sin(rads)) - diameter / 2;
@@ -266,6 +274,19 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	}
 
 	// added by Oliver
+	public void update() {
+		double panSpeed = 5;		
+		if (arrowKeys[0])
+			xOff += panSpeed;
+		else if (arrowKeys[2])
+			xOff -= panSpeed;
+
+		if (arrowKeys[1])
+			yOff += panSpeed;
+		else if (arrowKeys[3])
+			yOff -= panSpeed;
+	}
+
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		double zoomSpeed = .01;
@@ -277,13 +298,16 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {
+	}
 
 	@Override
-	public void mouseExited(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {
+	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -301,8 +325,26 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 			rmbPressed = false;
 	}
 
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() >= KeyEvent.VK_LEFT && e.getKeyCode() <= KeyEvent.VK_DOWN)
+			arrowKeys[e.getKeyCode() - KeyEvent.VK_LEFT] = true;
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (e.getKeyCode() >= KeyEvent.VK_LEFT && e.getKeyCode() <= KeyEvent.VK_DOWN)
+			arrowKeys[e.getKeyCode() - KeyEvent.VK_LEFT] = false;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
 	/**
 	 * Get the current zoom level of the solar system
+	 * 
 	 * @return current scale
 	 */
 	public double getScale() {
@@ -311,6 +353,7 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 
 	/**
 	 * Get the current timeScale of the solar system
+	 * 
 	 * @return current timeScale
 	 */
 	public double getTimeScale() {
@@ -330,6 +373,4 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 			this.col = col;
 		}
 	}
-
-	
 }
