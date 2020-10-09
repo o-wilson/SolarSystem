@@ -1,13 +1,14 @@
 public class CelestialBody {
     private String name;
     
-    private double diameter;
+    private double diameter; //in km
 
     private CelestialBody centerOfOrbit;
 
-    private double distanceToCentre;
+    private double distanceToCentre; //in million km
     private double angleToOrigin;
-    private double speed;
+    private double speed; // 365/days
+    private double lengthOfYear;
 
     private String color;
 
@@ -46,13 +47,14 @@ public class CelestialBody {
      * @param r Distance from center of orbit
      * @param th Angle from center of orbit
      */
-    public CelestialBody(String name, double diameter, double speed, String color, CelestialBody parent, double r, double th) {
+    public CelestialBody(String name, double diameter, double lengthOfYear, String color, CelestialBody parent, double r, double th) {
         this.name = name;
         this.diameter = diameter;
         this.centerOfOrbit = parent;
         this.distanceToCentre = r;
         this.angleToOrigin = th;
-        this.speed = speed;
+        this.speed = 365/lengthOfYear;
+        this.lengthOfYear = lengthOfYear;
         this.color = color;
     }
 
@@ -60,15 +62,31 @@ public class CelestialBody {
      * Draws the body to the screen using SolarSystem.drawSolarObjectAbout
      * @param system The SolarSystem to draw to
      */
-    public void draw(SolarSystem system) {
-        system.drawSolarObjectAbout(this);
+    public void draw(SolarSystem system, double scale) {
+        system.drawSolarObjectAbout(this.getScaledBody(scale));
+    }
+
+    public CelestialBody getScaledBody(double scale) {
+        CelestialBody scaledParent;
+        if (this.centerOfOrbit != CelestialBody.ORIGIN)
+            scaledParent = this.centerOfOrbit.getScaledBody(scale);
+        else
+            scaledParent = CelestialBody.ORIGIN;
+
+        CelestialBody scaled = new CelestialBody(
+            this.name, this.diameter * scale,
+            this.lengthOfYear, this.color,
+            scaledParent,
+            this.distanceToCentre * scale, this.angleToOrigin
+        );
+        return scaled;
     }
 
     /**
      * Updates the position of the body
      */
-    public void update() {
-        this.angleToOrigin += this.speed;
+    public void update(double timeScale) {
+        this.angleToOrigin += timeScale / this.speed;
     }
 
     public String getName() {

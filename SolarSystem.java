@@ -37,7 +37,7 @@ public class SolarSystem extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		
-		//added by me
+		//added by Oliver
 		this.setLocationRelativeTo(null);
         
         renderingHints = new HashMap<>();

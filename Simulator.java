@@ -5,12 +5,17 @@ public class Simulator {
 
     private ArrayList<CelestialBody> bodies;
 
+    private double scale;
+    private double timeScale;
+
     /**
      * Main class for running the simulation
      */
     public Simulator() {
         system = new SolarSystem(800, 600);
         bodies = new ArrayList<CelestialBody>();
+        scale = .5;
+        timeScale = 365;
         start();
         update();
     }
@@ -19,8 +24,10 @@ public class Simulator {
      * Initialise all objects
      */
     public void start() {
-        bodies.add(new CelestialBody("Sun", 50, "YELLOW"));
-        bodies.add(new CelestialBody("Earth", 20, 0.12f, "BLUE", getBodyByName("Sun"), 200, 0));
+        CelestialBody sun = new CelestialBody("Sun", 50, "YELLOW");
+        bodies.add(sun);
+        // bodies.add(new CelestialBody("Mercury", ))
+        bodies.add(new CelestialBody("Earth", 20, 0.12f, "BLUE", CelestialBody.ORIGIN, 200, 0));
         bodies.add(new CelestialBody("Moon", 10, 10, "WHITE", getBodyByName("Earth"), 40, 0));
     }
 
@@ -33,8 +40,8 @@ public class Simulator {
 
         while (true) {
             for (CelestialBody b : bodies) {
-                b.update();
-                b.draw(system);
+                b.update(timeScale);
+                b.draw(system, scale);
             }
             system.finishedDrawing();
 
