@@ -39,6 +39,8 @@ public class Simulator {
         system.setVisible(windowVisible);
 
         while (true) {
+            scale = system.getScale();
+
             for (CelestialBody b : bodies) {
                 b.update(timeScale);
                 b.draw(system, scale);

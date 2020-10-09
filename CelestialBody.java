@@ -66,6 +66,11 @@ public class CelestialBody {
         system.drawSolarObjectAbout(this.getScaledBody(scale));
     }
 
+    /**
+     * Creates a temporary instance of the body, with dimensions scaled to screen dimensions rather than actual
+     * @param scale Current screen scale/zoom
+     * @return CelestialBody with scaled diameter and distance
+     */
     public CelestialBody getScaledBody(double scale) {
         CelestialBody scaledParent;
         if (this.centerOfOrbit != CelestialBody.ORIGIN)

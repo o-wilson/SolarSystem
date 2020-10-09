@@ -8,7 +8,7 @@ import java.util.*;
  * This class provides a graphical user interface to a model of the solar system
  * @author Joe Finney
  */
-public class SolarSystem extends JFrame 
+public class SolarSystem extends JFrame implements MouseWheelListener
 {
 	private int width = 300;
 	private int height = 300;
@@ -16,6 +16,9 @@ public class SolarSystem extends JFrame
     private Map<RenderingHints.Key, Object> renderingHints;
 
 	private ArrayList<SolarObject> things = new ArrayList<SolarObject>();
+
+	//added by Oliver
+	private double scale;
 
 	/**
 	 * Create a view of the Solar System.
@@ -50,6 +53,10 @@ public class SolarSystem extends JFrame
 		renderingHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		renderingHints.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 		renderingHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+
+		//added by Oliver
+		scale = 1;
+		addMouseWheelListener(this);
 	}
 
 	/**
@@ -251,6 +258,17 @@ public class SolarSystem extends JFrame
 			}
 		}
 		catch (Exception e) { }
+	}
+
+	//added by Oliver
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		double zoomSpeed = .05;
+		scale -= e.getWheelRotation() * zoomSpeed;
+	}
+
+	public double getScale() {
+		return scale;
 	}
 	
 	private class SolarObject 
