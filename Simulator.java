@@ -14,7 +14,6 @@ public class Simulator {
     public Simulator() {
         system = new SolarSystem(1600, 900);
         bodies = new ArrayList<CelestialBody>();
-        timeScale = 1;
         start();
         update();
     }
@@ -45,6 +44,7 @@ public class Simulator {
 
         while (true) {
             scale = system.getScale();
+            timeScale = system.getTimeScale();
 
             for (CelestialBody b : bodies) {
                 b.update(timeScale);

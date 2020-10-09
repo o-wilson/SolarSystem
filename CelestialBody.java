@@ -136,12 +136,12 @@ public class CelestialBody {
         this.angleToOrigin = angleToOrigin;
     }
 
-    public double getSpeed() {
-        return speed;
+    public double getLengthOfYear() {
+        return lengthOfYear;
     }
 
-    public void setSpeed(double speed) {
-        this.speed = speed;
+    public void setLengthOfYear(double lengthOfYear) {
+        this.lengthOfYear = lengthOfYear;
     }
 
     public String getColor() {
