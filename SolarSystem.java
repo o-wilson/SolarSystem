@@ -59,7 +59,7 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 
 		// added by Oliver
 		scale = .4;
-		timeScale = 365;
+		timeScale = 100;
 		addMouseWheelListener(this);
 		addMouseListener(this);
 		addKeyListener(this);
@@ -234,10 +234,10 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 		double y = (int) (centreOfRotationY + distance * Math.cos(rads)) - diameter / 2;
 
 		synchronized (this) {
-			if (things.size() > 1000) {
+			if (things.size() > 10000) {
 				System.out.println("\n\n");
 				System.out.println(" ********************************************************* ");
-				System.out.println(" ***** Only 1000 Entities Supported per Solar System ***** ");
+				System.out.println(" ***** Only 10000 Entities Supported per Solar System ***** ");
 				System.out.println(" ********************************************************* ");
 				System.out.println("\n\n");
 				System.out.println("If you are't trying to add this many things");

@@ -39,7 +39,7 @@ public class CelestialBody {
     }
 
     /**
-     * Main constructor for a CelestialBody with position, size, centre of orbit and speed
+     * Main constructor for a CelestialBody with position, size, centre of orbit and speed. Adds parent radius by default
      * @param name Name of the Body
      * @param diameter Diameter of the Body
      * @param speed Angular speed of the Body
@@ -49,10 +49,25 @@ public class CelestialBody {
      * @param th Angle from center of orbit
      */
     public CelestialBody(String name, double diameter, double lengthOfYear, String color, CelestialBody parent, double r, double th) {
+        this(name, diameter, lengthOfYear, color, parent, r, th, true);
+    }
+
+    /**
+     * Constructor with option to not add parent radius
+     * @param name Name of the Body
+     * @param diameter Diameter of the Body
+     * @param speed Angular speed of the Body
+     * @param color Color of the Body
+     * @param parent Body at the center of orbit
+     * @param r Distance from edge of center of orbit
+     * @param th Angle from center of orbit
+     * @param addParentRadius Whether to add the radius of the parent onto the distance from the center or not
+     */
+    public CelestialBody(String name, double diameter, double lengthOfYear, String color, CelestialBody parent, double r, double th, boolean addParentRadius) {
         this.name = name;
         this.diameter = diameter;
         this.centerOfOrbit = parent;
-        this.distanceToCentre = r + parent.getDiameter() / 2;
+        this.distanceToCentre = (addParentRadius) ? r + parent.getDiameter() / 2 : r;
         this.angleToOrigin = th;
         this.speed = 365/lengthOfYear;
         this.lengthOfYear = lengthOfYear;
@@ -63,7 +78,8 @@ public class CelestialBody {
      * Draws the body to the screen using SolarSystem.drawSolarObjectAbout
      * @param system The SolarSystem to draw to
      */
-    public void draw(SolarSystem system, double scale) {
+    public void draw(SolarSystem system) {
+        double scale = system.getScale();
         system.drawSolarObjectAbout(this.getScaledBody(scale));
     }
 
@@ -91,9 +107,9 @@ public class CelestialBody {
     /**
      * Updates the position of the body
      */
-    public void update(double timeScale) {
+    public void update(SolarSystem system) {
         if (this.lengthOfYear != 0)
-            this.angleToOrigin += timeScale / this.lengthOfYear;
+            this.angleToOrigin += system.getTimeScale() / this.lengthOfYear;
     }
 
     public String getName() {
