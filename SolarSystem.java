@@ -24,6 +24,9 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	private boolean rmbPressed, lmbPressed;
 	private double xOff, yOff;
 	private boolean[] arrowKeys; //Clockwise from left - L,U,R,D
+	private boolean escapePressed; //Whether the escape key is pressed
+	private static double DEFAULT_SCALE = 0.4;
+	private static double DEFAULT_TIME_SCALE = 100;
 
 	/**
 	 * Create a view of the Solar System. Once an instance of the SolarSystem class
@@ -58,16 +61,14 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 		renderingHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
 		// added by Oliver
-		scale = .4;
-		timeScale = 100;
+		resetSettings();
 		addMouseWheelListener(this);
 		addMouseListener(this);
 		addKeyListener(this);
 		rmbPressed = false;
 		lmbPressed = false;
-		xOff = 0;
-		yOff = 0;
 		arrowKeys = new boolean[] {false, false, false, false};
+		escapePressed = false;
 	}
 
 	/**
@@ -122,6 +123,13 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	}
 
 	/**
+	 * Draws round shape at given coords, scaled by default
+	 */
+	public void drawSolarObject(double distance, double angle, double diameter, String col) {
+		drawSolarObject(distance, angle, diameter, col, new boolean[] {true, true});
+	}
+
+	/**
 	 * Draws a round shape in the window at the given co-ordinates that represents
 	 * an object in the solar system. The SolarSystem class uses <i>Polar
 	 * Co-ordinates</i> to represent the location of objects in the solar system.
@@ -137,16 +145,23 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	 *                 Alternatively, a 24 bit hexadecimal string representation of
 	 *                 an RGB colour is also accepted, e.g. "#FF0000"
 	 *                 </p>
+	 * @param scaled A vector of booleans 0-size scale 1-position scale
 	 */
-	public void drawSolarObject(double distance, double angle, double diameter, String col) {
+	public void drawSolarObject(double distance, double angle, double diameter, String col, boolean[] scaled) {
+		//scale for size and position
+		double[] tempScale = new double[] {this.scale, this.scale};
+		for (int i = 0; i < 2; i++)
+			tempScale[i] = (scaled[i]) ? this.scale : 1;
+
 		Color colour = this.getColourFromString(col);
 		//xOff, yOff added by Oliver
 		double centreOfRotationX = (((double) width) / 2.0) + xOff;
 		double centreOfRotationY = (((double) height) / 2.0) + yOff;
 
 		double rads = Math.toRadians(angle);
-		double x = (int) (centreOfRotationX + distance * Math.sin(rads)) - diameter / 2;
-		double y = (int) (centreOfRotationY + distance * Math.cos(rads)) - diameter / 2;
+		// * scale added by Oliver
+		double x = (int) (centreOfRotationX + (distance * tempScale[1]) * Math.sin(rads)) - (diameter * tempScale[0]) / 2;
+		double y = (int) (centreOfRotationY + (distance * tempScale[1]) * Math.cos(rads)) - (diameter * tempScale[0]) / 2;
 
 		synchronized (this) {
 			if (things.size() > 1000) {
@@ -164,28 +179,48 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 
 				this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 			} else {
-				SolarObject t = new SolarObject((int) x, (int) y, (int) diameter, colour);
+				// * scale added by Oliver
+				SolarObject t = new SolarObject((int) x, (int) y, (int) (diameter * tempScale[0]), colour);
 				things.add(t);
 			}
 		}
 	}
 
 	/**
-	 * Draws a Body relative to its default centre of orbit
+	 * Draws a Body relative to its default centre of orbit, scaled by default
 	 * 
 	 * @param child The Body to be drawn
 	 */
 	public void drawSolarObjectAbout(CelestialBody child) {
-		drawSolarObjectAbout(child, child.getCenterOfOrbit());
+		drawSolarObjectAbout(child, child.getCenterOfOrbit(), new boolean[] {true, true});
 	}
 
 	/**
-	 * Draws the child object relative to its parent (centre of orbit)
+	 * Draws a Body relative to its default centre of orbit, with option to not rescale
+	 * @param child The Body to be drawn
+	 * @param scaled A vector of booleans 0-size scale 1-position scale
+	 */
+	public void drawSolarObjectAbout(CelestialBody child, boolean[] scaled) {
+		drawSolarObjectAbout(child, child.getCenterOfOrbit(), scaled);
+	}
+
+	/**
+	 * Draws the child object relative to a parent (centre of orbit), scaled by default
 	 * 
 	 * @param child  The Body to be drawn
 	 * @param parent The Body it's orbiting
 	 */
 	public void drawSolarObjectAbout(CelestialBody child, CelestialBody parent) {
+		drawSolarObjectAbout(child, parent, new boolean[] {true, true});
+	}
+
+	/**
+	 * Draws the child object relative to a parent (centre of orbit), with option to not rescale
+	 * @param child  The Body to be drawn
+	 * @param parent The Body it's orbiting
+	 * @param scaled A vector of booleans 0-size scale 1-position scale
+	 */
+	public void drawSolarObjectAbout(CelestialBody child, CelestialBody parent, boolean[] scaled) {
 		double distance = child.getDistanceToCentre();
 		double angle = child.getAngleToOrigin();
 		double diameter = child.getDiameter();
@@ -193,7 +228,7 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 		double cORD = parent.getDistanceToCentre();
 		double cORA = parent.getAngleToOrigin();
 
-		drawSolarObjectAbout(distance, angle, diameter, col, cORD, cORA);
+		drawSolarObjectAbout(distance, angle, diameter, col, cORD, cORA, scaled);
 	}
 
 	/**
@@ -222,7 +257,12 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	 *                                 about which this object orbits.
 	 */
 	public void drawSolarObjectAbout(double distance, double angle, double diameter, String col,
-			double centreOfRotationDistance, double centreOfRotationAngle) {
+			double centreOfRotationDistance, double centreOfRotationAngle, boolean[] scaled) {
+		//scale for size and position
+		double[] tempScale = new double[] {this.scale, this.scale};
+		for (int i = 0; i < 2; i++)
+			tempScale[i] = (scaled[i]) ? this.scale : 1;
+
 		Color colour = this.getColourFromString(col);
 		double centrerads = Math.toRadians(centreOfRotationAngle);
 		//xOff, yOff added by Oliver
@@ -230,8 +270,8 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 		double centreOfRotationY = (((double) height) / 2.0) + centreOfRotationDistance * Math.cos(centrerads) + yOff;
 
 		double rads = Math.toRadians(angle);
-		double x = (int) (centreOfRotationX + distance * Math.sin(rads)) - diameter / 2;
-		double y = (int) (centreOfRotationY + distance * Math.cos(rads)) - diameter / 2;
+		double x = (int) (centreOfRotationX + (distance * tempScale[1]) * Math.sin(rads)) - (diameter * tempScale[0]) / 2;
+		double y = (int) (centreOfRotationY + (distance * tempScale[1]) * Math.cos(rads)) - (diameter * tempScale[0]) / 2;
 
 		synchronized (this) {
 			if (things.size() > 10000) {
@@ -249,7 +289,7 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 
 				this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 			} else {
-				SolarObject t = new SolarObject((int) x, (int) y, (int) diameter, colour);
+				SolarObject t = new SolarObject((int) x, (int) y, (int) (diameter * tempScale[0]), colour);
 				things.add(t);
 			}
 		}
@@ -285,6 +325,16 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 			yOff += panSpeed;
 		else if (arrowKeys[3])
 			yOff -= panSpeed;
+
+		if (escapePressed)
+			resetSettings();
+	}
+
+	private void resetSettings() {
+		scale = DEFAULT_SCALE;
+		timeScale = DEFAULT_TIME_SCALE;
+		xOff = 0;
+		yOff = 0;
 	}
 
 	@Override
@@ -329,12 +379,16 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() >= KeyEvent.VK_LEFT && e.getKeyCode() <= KeyEvent.VK_DOWN)
 			arrowKeys[e.getKeyCode() - KeyEvent.VK_LEFT] = true;
+		else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			escapePressed = true;
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() >= KeyEvent.VK_LEFT && e.getKeyCode() <= KeyEvent.VK_DOWN)
 			arrowKeys[e.getKeyCode() - KeyEvent.VK_LEFT] = false;
+		else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			escapePressed = false;
 	}
 
 	@Override

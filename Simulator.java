@@ -33,6 +33,8 @@ public class Simulator {
         bodies.add(new Planet("Saturn", 116.46, 10759, "YELLOW", sun, 1434, 90));
         bodies.add(new Planet("Uranus", 50.724, 30688, "CYAN", sun, 2871, 90));
         bodies.add(new Planet("Neptune", 49.244, 60182, "BLUE", sun, 4495, 90));
+
+        
     }
 
     /**

@@ -14,19 +14,7 @@ public class OrbitMarker extends CelestialBody {
     }
 
     @Override
-    public CelestialBody getScaledBody(double scale) {
-        CelestialBody scaledParent;
-        if (this.getCenterOfOrbit() != CelestialBody.ORIGIN)
-            scaledParent = this.getCenterOfOrbit().getScaledBody(scale);
-        else
-            scaledParent = CelestialBody.ORIGIN;
-
-        CelestialBody scaled = new CelestialBody(
-            this.getName(), this.getDiameter(),
-            this.getLengthOfYear(), this.getColor(),
-            scaledParent,
-            this.getDistanceToCentre() * scale, this.getAngleToOrigin()
-        );
-        return scaled;
+    public void draw(SolarSystem system) {
+        system.drawSolarObjectAbout(this, new boolean[] {false, true});
     }
 }

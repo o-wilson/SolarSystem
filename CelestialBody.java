@@ -79,29 +79,7 @@ public class CelestialBody {
      * @param system The SolarSystem to draw to
      */
     public void draw(SolarSystem system) {
-        double scale = system.getScale();
-        system.drawSolarObjectAbout(this.getScaledBody(scale));
-    }
-
-    /**
-     * Creates a temporary instance of the body, with dimensions scaled to screen dimensions rather than actual
-     * @param scale Current screen scale/zoom
-     * @return CelestialBody with scaled diameter and distance
-     */
-    public CelestialBody getScaledBody(double scale) {
-        CelestialBody scaledParent;
-        if (this.centerOfOrbit != CelestialBody.ORIGIN)
-            scaledParent = this.centerOfOrbit.getScaledBody(scale);
-        else
-            scaledParent = CelestialBody.ORIGIN;
-
-        CelestialBody scaled = new CelestialBody(
-            this.name, this.diameter * scale,
-            this.lengthOfYear, this.color,
-            scaledParent,
-            this.distanceToCentre * scale, this.angleToOrigin
-        );
-        return scaled;
+        system.drawSolarObjectAbout(this);
     }
 
     /**

@@ -31,7 +31,7 @@ public class Planet extends CelestialBody {
     @Override
     public void draw(SolarSystem system) {
         for (OrbitMarker o : orbitMarkers)
-            if (getScaledBody(system.getScale()).getDiameter() >= 2)
+            if (getDiameter() * system.getScale() >= 2)
                 o.draw(system);
 
         //super called after so that planet is drawn on top of trail
