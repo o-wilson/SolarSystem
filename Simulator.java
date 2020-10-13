@@ -38,7 +38,14 @@ public class Simulator {
         bodies.add(new Planet("Uranus", 50.724, 30688, "CYAN", sun, 2871, 90));
         bodies.add(new Planet("Neptune", 49.244, 60182, "BLUE", sun, 4495, 90));
 
-        
+        //Generating an asteroid belt
+        for (int i = 0; i < 500; i++) {
+            double distance = (rand.nextGaussian() * (100/6) + 270) * 1.496; //normally distributed roughly between 2.2 and 3.2 AU (m=2.7, s=1/6)
+            double angle = rand.nextDouble() * 360;
+            double diameter = rand.nextGaussian() * (28/3) + 0.016; //just a guess to be honest (mean = 16km)
+            double lengthOfYear = (rand.nextGaussian() * 0.5 + 4.5) * 365; //normally distributed roughly between 3 and 6 Earth years
+            bodies.add(new CelestialBody("Asteroid " + i, diameter, lengthOfYear, "GRAY", sun, distance, angle));
+        }
     }
 
     /**
