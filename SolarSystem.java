@@ -5,6 +5,8 @@ import java.awt.image.*;
 import java.awt.event.*;
 import java.util.*;
 
+import java.lang.reflect.*;
+
 /**
  * This class provides a graphical user interface to a model of the solar system
  * 
@@ -48,7 +50,23 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 
 		// added by Oliver
 		this.setLocationRelativeTo(null);
-		this.setResizable(false);
+		this.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				try {
+					Method m = e.getComponent().getClass().getMethod("setDimensions", new Class[] {int.class, int.class});
+					m.invoke(
+						e.getComponent(),
+						new Object[] {
+							e.getComponent().getWidth(),
+							e.getComponent().getHeight()
+						}
+					);
+				} catch (Exception ex) { //catch for getMethod and Method.invoke
+					ex.printStackTrace();
+				}
+			}
+		});
 
 		renderingHints = new HashMap<>();
 		renderingHints.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
@@ -70,6 +88,11 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 		lmbPressed = false;
 		arrowKeys = new boolean[] {false, false, false, false};
 		escapePressed = false;
+	}
+
+	public void setDimensions(int width, int height) {
+		this.width = width;
+		this.height = height;
 	}
 
 	/**
@@ -306,6 +329,7 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 	public void finishedDrawing() {
 		try {
 			this.repaint();
+			// this.repaint(0, 0, this.getWidth(), this.getHeight());
 			Thread.sleep(20);
 			synchronized (this) {
 				things.clear();
