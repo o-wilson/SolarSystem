@@ -266,8 +266,8 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 		Color colour = this.getColourFromString(col);
 		double centrerads = Math.toRadians(centreOfRotationAngle);
 		//xOff, yOff added by Oliver
-		double centreOfRotationX = (((double) width) / 2.0) + centreOfRotationDistance * Math.sin(centrerads) + xOff;
-		double centreOfRotationY = (((double) height) / 2.0) + centreOfRotationDistance * Math.cos(centrerads) + yOff;
+		double centreOfRotationX = (((double) width) / 2.0) + centreOfRotationDistance * tempScale[1] * Math.sin(centrerads) + xOff;
+		double centreOfRotationY = (((double) height) / 2.0) + centreOfRotationDistance * tempScale[1] * Math.cos(centrerads) + yOff;
 
 		double rads = Math.toRadians(angle);
 		double x = (int) (centreOfRotationX + (distance * tempScale[1]) * Math.sin(rads)) - (diameter * tempScale[0]) / 2;
@@ -310,6 +310,8 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 				things.clear();
 			}
 		} catch (Exception e) {
+			//added by Oliver
+			e.printStackTrace();
 		}
 	}
 

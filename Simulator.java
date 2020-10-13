@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Simulator {
     private SolarSystem system;
@@ -8,12 +9,15 @@ public class Simulator {
     private double scale;
     private double timeScale;
 
+    private Random rand;
+
     /**
      * Main class for running the simulation
      */
     public Simulator() {
         system = new SolarSystem(1600, 900);
         bodies = new ArrayList<CelestialBody>();
+        rand = new Random();
         start();
         update();
     }
