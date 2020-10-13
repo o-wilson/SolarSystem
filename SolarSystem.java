@@ -48,6 +48,7 @@ public class SolarSystem extends JFrame implements MouseWheelListener, MouseList
 
 		// added by Oliver
 		this.setLocationRelativeTo(null);
+		this.setResizable(false);
 
 		renderingHints = new HashMap<>();
 		renderingHints.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);

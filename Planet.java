@@ -22,7 +22,7 @@ public class Planet extends CelestialBody {
 
         orbitTrack += timeScale / this.getLengthOfYear();
         orbitStep += timeScale / this.getLengthOfYear();
-        if (orbitStep >= 2 && orbitTrack <= 360) {
+        if (orbitStep >= 2 && orbitTrack <= 362) {
             orbitStep %= 2;
             orbitMarkers.add(new OrbitMarker(this, timeScale));
         }
